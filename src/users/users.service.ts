@@ -22,6 +22,11 @@ export class UsersService {
         }
     
         return user;
+    }
 
+    async getUsersByIds(ids: string[]) {
+        return await this.usersModel.find({
+            _id: { $in: ids }
+        }).exec();
     }
 }

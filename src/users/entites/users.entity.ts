@@ -4,12 +4,15 @@ import { Document } from "mongoose";
 @Schema({ timestamps: true })
 export class Users extends Document {
     @Prop()
+    clerkId: string;
+
+    @Prop()
     firstName: string;
 
     @Prop()
     lastName: string;
 
-    @Prop()
+    @Prop({ default: "" })
     bio: string;
 
     @Prop({ unique: true })
@@ -17,9 +20,6 @@ export class Users extends Document {
 
     @Prop({ unique: true })
     email: string;
-
-    @Prop()
-    password: string;
 
     @Prop()
     profilePicture: string;

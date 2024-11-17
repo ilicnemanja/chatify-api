@@ -1,4 +1,4 @@
-import { IsString, IsEmail } from 'class-validator';
+import { IsString, IsEmail, IsNumber } from 'class-validator';
 
 export class CreateUserDto {
 
@@ -20,12 +20,12 @@ export class CreateUserDto {
     @IsString()
     readonly imageUrl: string;
 
-    @IsString()
-    readonly createdAt: string;
+    @IsNumber()
+    readonly createdAt: Date;
 
-    @IsString()
-    readonly updatedAt: string;
+    @IsNumber()
+    readonly updatedAt: Date;
 
-    @IsString()
-    readonly lastActiveAt: string;
+    @IsNumber()
+    readonly lastActiveAt: Date;
 }

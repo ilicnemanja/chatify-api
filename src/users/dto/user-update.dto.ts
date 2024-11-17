@@ -1,4 +1,4 @@
-import { IsString, IsEmail, IsOptional } from 'class-validator';
+import { IsString, IsEmail, IsOptional, IsNumber } from 'class-validator';
 
 export class UpdateUserDto {
     @IsString()
@@ -21,13 +21,13 @@ export class UpdateUserDto {
     @IsOptional()
     readonly profilePicture?: string;
 
-    @IsString()
+    @IsNumber()
     @IsOptional()
     readonly updatedAt?: string;
 
-    @IsString()
+    @IsNumber()
     @IsOptional()
-    readonly lastActive?: string;
+    readonly lastActive?: Date;
 
     @IsString()
     @IsOptional()

@@ -12,7 +12,7 @@ export class AppController {
     return "Healthy!";
   }
 
-  @Get('webhooks')
+  @Get('webhook')
   async handleWebhook(@Body() payload: any) {
     return this.webhooksService.handleWebhook(payload);
   }

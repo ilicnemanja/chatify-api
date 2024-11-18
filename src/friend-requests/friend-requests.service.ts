@@ -77,22 +77,21 @@ export class FriendRequestsService {
     }
 
     async sendFriendRequest(senderId: string, receiverId: string) {
-
-        const existingFriendRequest = await this.friendRequestsModel.findOne(
-            {
-                $or: [
-                    { senderId: senderId, receiverId: receiverId },
-                    { senderId: receiverId, receiverId: senderId },
-                    { status: "pending" },
-                    { status: "accepted" }
-                ],
-            },
-        ).exec();
-
+        // Check for an existing friend request between sender and receiver
+        const existingFriendRequest = await this.friendRequestsModel.findOne({
+            $or: [
+                { senderId, receiverId },
+                { senderId: receiverId, receiverId: senderId }
+            ],
+            status: { $in: ["pending", "accepted"] } // Check only relevant statuses
+        }).exec();
+    
+        // If a matching request exists, throw an exception
         if (existingFriendRequest) {
-            throw new HttpException("Friend request already sent", HttpStatus.NOT_MODIFIED);
+            throw new HttpException("Friend request already sent!", HttpStatus.NOT_MODIFIED);
         }
-
+    
+        // Create and save a new friend request
         const friendRequest = new this.friendRequestsModel({
             senderId,
             receiverId,
@@ -100,6 +99,7 @@ export class FriendRequestsService {
         });
         await friendRequest.save();
     }
+    
 
     async getFriendRequests(userId: string) {
         const friendRequests = await this.friendRequestsModel.find(

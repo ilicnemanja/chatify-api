@@ -36,4 +36,14 @@ export class FriendRequestsController {
     async getFriendRequests(@Param('userId') userId: string) {
         return this.friendRequestsService.getFriendRequests(userId);
     }
+
+    @Post(':userId/accept-friend-request/:friendId')
+    async acceptFriendRequest(@Param('userId') userId: string, @Param('friendId') friendId: string) {
+        return this.friendRequestsService.acceptFriendRequest(userId, friendId);
+    }
+
+    @Post(':userId/reject-friend-request/:friendId')
+    async rejectFriendRequest(@Param('userId') userId: string, @Param('friendId') friendId: string) {
+        return this.friendRequestsService.rejectFriendRequest(userId, friendId);
+    }
 }

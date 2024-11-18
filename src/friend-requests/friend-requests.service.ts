@@ -40,8 +40,8 @@ export class FriendRequestsService {
             return request.senderId;
         });
 
-        const closeFriends = await this.usersService.getUsersByIds(closeFriendIds);
-        const allFriends = await this.usersService.getUsersByIds(allFriendIds);
+        const closeFriends = await this.usersService.getUsersByClerkIds(closeFriendIds);
+        const allFriends = await this.usersService.getUsersByClerkIds(allFriendIds);
     
         return { closeFriends, allFriends };
     }
@@ -78,7 +78,16 @@ export class FriendRequestsService {
 
     async sendFriendRequest(senderId: string, receiverId: string) {
 
-        const existingFriendRequest = await this.friendRequestsModel.findOne({ senderId, receiverId }).exec();
+        const existingFriendRequest = await this.friendRequestsModel.findOne(
+            {
+                $or: [
+                    { senderId: senderId, receiverId: receiverId },
+                    { senderId: receiverId, receiverId: senderId },
+                    { status: "pending" },
+                    { status: "accepted" }
+                ],
+            },
+        ).exec();
 
         if (existingFriendRequest) {
             throw new HttpException("Friend request already sent", HttpStatus.NOT_MODIFIED);
@@ -106,15 +115,15 @@ export class FriendRequestsService {
         return senders;
     }
 
-    // async acceptFriendRequest(senderId: string, receiverId: string) {
-    //     await this.friendRequestsModel.updateOne(
-    //         { senderId, receiverId },
-    //         { $set: { status: "accepted" } }
-    //     ).exec();
-    // }
+    async acceptFriendRequest(receiverId: string, senderId: string) {
+        await this.friendRequestsModel.updateOne(
+            { senderId, receiverId },
+            { $set: { status: "accepted" } }
+        ).exec();
+    }
 
-    // async rejectFriendRequest(senderId: string, receiverId: string) {
-    //     await this.friendRequestsModel.deleteOne({ senderId, receiverId }).exec();
-    // }
+    async rejectFriendRequest(receiverId: string, senderId: string) {
+        await this.friendRequestsModel.deleteOne({ senderId, receiverId }).exec();
+    }
     
 }

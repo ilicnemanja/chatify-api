@@ -79,6 +79,12 @@ export class UsersService {
         return user;
     }
 
+    async findAllUsersMatchingUsername(username: string) {
+        return await this.usersModel.find({
+            username: { $regex: username, $options: 'i' }
+        }).exec();
+    }
+
     async getUsersByIds(ids: string[]) {
         return await this.usersModel.find({
             _id: { $in: ids }

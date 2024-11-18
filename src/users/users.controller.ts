@@ -31,4 +31,9 @@ export class UsersController {
     findOne(@Param('username') username: string) {
         return this.usersService.findOne(username);
     }
+
+    @Get(':username/all')
+    findAllUsersMatchingUsername(@Param('username') username: string) {
+        return this.usersService.findAllUsersMatchingUsername(username);
+    }
 }

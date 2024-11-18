@@ -90,4 +90,10 @@ export class UsersService {
             _id: { $in: ids }
         }).exec();
     }
+
+    async getUsersByClerkIds(clerkIds: string[]) {
+        return await this.usersModel.find({
+            clerkId: { $in: clerkIds }
+        }).exec();
+    }
 }

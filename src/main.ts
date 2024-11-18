@@ -12,7 +12,7 @@ async function bootstrap() {
     origin: (origin, callback) => {
       const allowedOrigins = [
         "http://localhost:3000",
-        "https://chatify-theta-olive.vercel.app/",
+        "https://chatify-theta-olive.vercel.app",
       ];
 
       if (!origin || allowedOrigins.includes(origin)) {

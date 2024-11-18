@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { FriendRequests } from './entities/friend-requests.entity';
@@ -76,14 +76,35 @@ export class FriendRequestsService {
         ).exec();
     }
 
-    // async createFriendRequest(senderId: string, receiverId: string) {
-    //     const friendRequest = new this.friendRequestsModel({
-    //         senderId,
-    //         receiverId
-    //     });
+    async sendFriendRequest(senderId: string, receiverId: string) {
 
-    //     return friendRequest.save();
-    // }
+        const existingFriendRequest = await this.friendRequestsModel.findOne({ senderId, receiverId }).exec();
+
+        if (existingFriendRequest) {
+            throw new HttpException("Friend request already sent", HttpStatus.NOT_MODIFIED);
+        }
+
+        const friendRequest = new this.friendRequestsModel({
+            senderId,
+            receiverId,
+            status: "pending"
+        });
+        await friendRequest.save();
+    }
+
+    async getFriendRequests(userId: string) {
+        const friendRequests = await this.friendRequestsModel.find(
+            {
+                receiverId: userId,
+                status: "pending"
+            }
+        ).exec();
+
+        const senderIds = friendRequests.map(request => request.senderId);
+        const senders = await this.usersService.getUsersByClerkIds(senderIds);
+
+        return senders;
+    }
 
     // async acceptFriendRequest(senderId: string, receiverId: string) {
     //     await this.friendRequestsModel.updateOne(

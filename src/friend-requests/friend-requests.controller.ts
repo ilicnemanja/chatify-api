@@ -26,4 +26,14 @@ export class FriendRequestsController {
     async removeFromCloseFriends(@Param('userId') userId: string, @Param('friendId') friendId: string) {
         return this.friendRequestsService.removeFromCloseFriends(userId, friendId);
     }
+
+    @Post(':userId/send-friend-request/:friendId')
+    async sendFriendRequest(@Param('userId') userId: string, @Param('friendId') friendId: string) {
+        return this.friendRequestsService.sendFriendRequest(userId, friendId);
+    }
+
+    @Get(':userId')
+    async getFriendRequests(@Param('userId') userId: string) {
+        return this.friendRequestsService.getFriendRequests(userId);
+    }
 }

@@ -126,4 +126,21 @@ export class FriendRequestsService {
         await this.friendRequestsModel.deleteOne({ senderId, receiverId }).exec();
     }
     
+    async findAllNoFriendsUsers(username: string, clerkId: string) {
+        const users = await this.usersService.findAllUsersMatchingUsername(username);
+
+        if (!users.length) {
+            return [];
+        }
+
+        const friends = await this.getAllFriendsByUserId(clerkId)
+
+        if (!friends.allFriends.length) {
+            return users;
+        }
+
+        const allFriendIds = friends.allFriends.map(friend => friend.clerkId);
+
+        return users.filter(user => !allFriendIds.includes(user.clerkId));
+    }
 }

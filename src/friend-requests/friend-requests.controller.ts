@@ -46,4 +46,9 @@ export class FriendRequestsController {
     async rejectFriendRequest(@Param('userId') userId: string, @Param('friendId') friendId: string) {
         return this.friendRequestsService.rejectFriendRequest(userId, friendId);
     }
+
+    @Get(':username/all/:clerkId')
+    findAllNoFriendsUsers(@Param('username') username: string, @Param('clerkId') clerkId: string) {
+        return this.friendRequestsService.findAllNoFriendsUsers(username, clerkId);
+    }
 }

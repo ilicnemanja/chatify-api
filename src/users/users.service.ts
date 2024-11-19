@@ -79,10 +79,10 @@ export class UsersService {
         return user;
     }
 
-    async findAllUsersMatchingUsername(username: string) {
+    async findAllUsersMatchingUsername(username: string): Promise<any> {
         return await this.usersModel.find({
             username: { $regex: username, $options: 'i' }
-        }).exec();
+        }).lean().exec();
     }
 
     async getUsersByIds(ids: string[]) {

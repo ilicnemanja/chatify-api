@@ -115,6 +115,19 @@ export class FriendRequestsService {
         return senders;
     }
 
+    async getAllFriendRequestSend(userId: string) {
+        const friendRequests = await this.friendRequestsModel.find(
+            {
+                senderId: userId,
+                status: "pending"
+            }
+        ).exec();
+
+        const receiverIds = friendRequests.map(request => request.receiverId);
+
+        return receiverIds;
+    }
+
     async acceptFriendRequest(receiverId: string, senderId: string) {
         await this.friendRequestsModel.updateOne(
             { senderId, receiverId },
@@ -122,25 +135,34 @@ export class FriendRequestsService {
         ).exec();
     }
 
-    async rejectFriendRequest(receiverId: string, senderId: string) {
-        await this.friendRequestsModel.deleteOne({ senderId, receiverId }).exec();
+    async rejectFriendRequest(senderId: string, receiverId: string,) {
+        await this.friendRequestsModel.deleteOne({ senderId, receiverId }, {
+            status: "pending"
+        }).exec();
     }
     
-    async findAllNoFriendsUsers(username: string, clerkId: string) {
+    async findAllNoFriendsUsers(username: string, clerkId: string): Promise<any[]> {
         const users = await this.usersService.findAllUsersMatchingUsername(username);
-
+    
         if (!users.length) {
             return [];
         }
-
-        const friends = await this.getAllFriendsByUserId(clerkId)
-
-        if (!friends.allFriends.length) {
-            return users;
-        }
-
+    
+        const friends = await this.getAllFriendsByUserId(clerkId);
+    
         const allFriendIds = friends.allFriends.map(friend => friend.clerkId);
-
-        return users.filter(user => !allFriendIds.includes(user.clerkId));
+    
+        const allFriendRequestSend = await this.getAllFriendRequestSend(clerkId);
+    
+        const filteredUsers = users.map(user => {
+            return {
+                ...user,
+                isFriendRequestSent: allFriendRequestSend.includes(user.clerkId),
+                isFriend: allFriendIds.includes(user.clerkId)
+            };
+        }).filter(user => !allFriendIds.includes(user.clerkId));
+    
+        return filteredUsers;
     }
+    
 }

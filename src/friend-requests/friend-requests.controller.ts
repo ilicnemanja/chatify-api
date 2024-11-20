@@ -7,31 +7,6 @@ export class FriendRequestsController {
         private friendRequestsService: FriendRequestsService
     ) {}
 
-    // @Get(':userId')
-    // async getFriendRequestsByUserId(@Param('userId') userId: string) {
-    //     return this.friendRequestsService.getFriendRequestsByUserId(userId);
-    // }
-
-    @Get(':userId/friend-status/:friendId')
-    async getFriendByUserId(@Param('userId') userId: string, @Param('friendId') friendId: string) {
-        return this.friendRequestsService.getFriendshipStatusByUserId(userId, friendId);
-    }
-
-    @Get(':userId/friends')
-    async getFriendsByUserId(@Param('userId') userId: string) {
-        return this.friendRequestsService.getAllFriendsByUserId(userId);
-    }
-
-    @Post(':userId/add-close-friend/:friendId')
-    async addToCloseFriends(@Param('userId') userId: string, @Param('friendId') friendId: string) {
-        return this.friendRequestsService.addToCloseFriends(userId, friendId);
-    }
-
-    @Post(':userId/remove-close-friend/:friendId')
-    async removeFromCloseFriends(@Param('userId') userId: string, @Param('friendId') friendId: string) {
-        return this.friendRequestsService.removeFromCloseFriends(userId, friendId);
-    }
-
     @Post(':userId/send-friend-request/:friendId')
     async sendFriendRequest(@Param('userId') userId: string, @Param('friendId') friendId: string) {
         return this.friendRequestsService.sendFriendRequest(userId, friendId);
@@ -49,7 +24,12 @@ export class FriendRequestsController {
 
     @Post(':userId/reject-friend-request/:friendId')
     async rejectFriendRequest(@Param('userId') userId: string, @Param('friendId') friendId: string) {
-        return this.friendRequestsService.rejectFriendRequest(userId, friendId);
+        return this.friendRequestsService.rejectFriendRequest(friendId, userId);
+    }
+
+    @Post(':userId/remove-accepted-friend-request/:friendId')
+    async removeAccepted(@Param('userId') userId: string, @Param('friendId') friendId: string) {
+        return this.friendRequestsService.removeAcceptedFriendRequest(userId, friendId);
     }
 
     @Get(':username/all/:clerkId')

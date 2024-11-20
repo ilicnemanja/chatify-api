@@ -11,9 +11,6 @@ export class FriendRequests extends Document {
 
     @Prop({ default: "pending" })
     status: string;
-
-    @Prop({ default: false })
-    isCloseFriend: boolean;
 }
 
 export const FriendRequestsSchema = SchemaFactory.createForClass(FriendRequests);

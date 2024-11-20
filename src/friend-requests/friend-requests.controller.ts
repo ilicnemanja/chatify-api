@@ -12,6 +12,11 @@ export class FriendRequestsController {
     //     return this.friendRequestsService.getFriendRequestsByUserId(userId);
     // }
 
+    @Get(':userId/friend-status/:friendId')
+    async getFriendByUserId(@Param('userId') userId: string, @Param('friendId') friendId: string) {
+        return this.friendRequestsService.getFriendshipStatusByUserId(userId, friendId);
+    }
+
     @Get(':userId/friends')
     async getFriendsByUserId(@Param('userId') userId: string) {
         return this.friendRequestsService.getAllFriendsByUserId(userId);

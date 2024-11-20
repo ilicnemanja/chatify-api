@@ -15,6 +15,24 @@ export class FriendRequestsService {
     //     return `This action returns all friendRequests by userId: ${userId}`;
     // }
 
+    async getFriendshipStatusByUserId(userId: string, friendId: string): Promise<{ isCloseFriend: boolean } | null> {
+        const friendRequest = await this.friendRequestsModel.findOne(
+            {
+                $or: [
+                    { senderId: userId, receiverId: friendId },
+                    { senderId: friendId, receiverId: userId }
+                ],
+                status: "accepted"
+            }
+        ).lean().exec();
+
+        if (!friendRequest) {
+            return null;
+        }
+
+        return { isCloseFriend: friendRequest.isCloseFriend };
+    }
+
     async getAllFriendsByUserId(userId: string) {
         const friendRequests = await this.friendRequestsModel.find(
             {

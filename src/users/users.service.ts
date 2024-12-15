@@ -96,4 +96,8 @@ export class UsersService {
             clerkId: { $in: clerkIds }
         }).exec();
     }
+
+    async getFriendByFriendClerkId(friendId: string) {
+        return await this.usersModel.findOne({ clerkId: friendId }).exec();
+    }
 }

@@ -36,4 +36,9 @@ export class UsersController {
     findAllUsersMatchingUsername(@Param('username') username: string) {
         return this.usersService.findAllUsersMatchingUsername(username);
     }
+
+    @Get('find/:friendId')
+    async getFriendByFriendClerkId(@Param('friendId') friendId: string) {
+        return this.usersService.getFriendByFriendClerkId(friendId);
+    }
 }

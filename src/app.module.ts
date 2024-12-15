@@ -8,13 +8,15 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { config } from 'dotenv';
 import { AuthModule } from './auth/auth.module';
 import { FriendsModule } from './friends/friends.module';
+import { ChatsModule } from './chats/chats.module';
+
 config();
 @Module({
   imports: [
     UsersModule,
     FriendRequestsModule,
     PostsModule, 
-    MongooseModule.forRoot(process.env.MONGODB_CONNECTION_STRING), AuthModule, FriendsModule
+    MongooseModule.forRoot(process.env.MONGODB_CONNECTION_STRING), AuthModule, FriendsModule, ChatsModule
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -8,7 +8,7 @@ import {
   OnGatewayDisconnect,
 } from '@nestjs/websockets';
 
-@WebSocketGateway(4001, { namespace: 'chats', cors: { origin: '*' } })
+@WebSocketGateway({ namespace: 'chats', cors: { origin: '*' } })
 export class ChatsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   private clients = new Map<string, string>(); // Map userId to client socketId
 
